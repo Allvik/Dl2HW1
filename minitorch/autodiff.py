@@ -72,6 +72,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     """
     order = []
     used = {}
+
     def dfs(v: Variable):
         used[v.unique_id] = 1
         if v.is_constant():
@@ -86,7 +87,6 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     return order
 
 
-
 def backpropagate(variable: Variable, deriv: Any) -> None:
     """
     Runs backpropagation on the computation graph in order to
@@ -98,28 +98,20 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # order = topological_sort(variable)
-    # print(order)
-    # d = {}
-    # d[variable.unique_id] = deriv
+    order = topological_sort(variable)
+    print(order)
+    d = {}
+    d[variable.unique_id] = deriv
 
-    # for var in reversed(order):
-    #     print(var)
-    #     if var.is_leaf():
-    #         var.accumulate_derivative(d.get(var.unique_id, 0.0))
-    #     else:
-    #         for (son, val) in var.chain_rule(d.get(var.unique_id, 0.0)):
-    #             if son.unique_id not in d:
-    #                 d[son.unique_id] = 0.0
-    #             d[son.unique_id] += val
-    
-    if variable.is_constant():
-        return
-    if variable.is_leaf():
-        variable.accumulate_derivative(deriv)
-        return
-    for (var, val) in variable.chain_rule(deriv):
-        backpropagate(var, val) 
+    for var in reversed(order):
+        print(var)
+        if var.is_leaf():
+            var.accumulate_derivative(d.get(var.unique_id, 0.0))
+        else:
+            for (son, val) in var.chain_rule(d.get(var.unique_id, 0.0)):
+                if son.unique_id not in d:
+                    d[son.unique_id] = 0.0
+                d[son.unique_id] += val
 
 
 @dataclass
