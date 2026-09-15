@@ -26,7 +26,7 @@ def predictions_dataframe(predictions, sentences):
     ]
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def load_glue_dataset():
     print("Loading dataset")
     return load_dataset("glue", "sst2")

@@ -22,8 +22,17 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    # TODO: Implement for Task 1.1.
-    raise NotImplementedError('Need to implement for Task 1.1')
+    vals = list(vals)
+    vals[arg] -= epsilon / 2
+    vals = tuple(vals)
+    # print(*vals)
+    # print(f(*vals))
+    was = f(*vals)
+    vals = list(vals)
+    vals[arg] += epsilon
+    vals = tuple(vals)
+    print(f(*vals))
+    return (f(*vals) - was) / (epsilon)
 
 
 variable_count = 1
@@ -61,8 +70,21 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    order = []
+    used = {}
+    def dfs(v: Variable):
+        used[v.unique_id] = 1
+        if v.is_constant():
+            return
+        for son in v.parents:
+            if son.unique_id in used:
+                continue
+            dfs(son)
+        order.append(v)
+
+    dfs(variable)
+    return order
+
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -76,8 +98,28 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    # order = topological_sort(variable)
+    # print(order)
+    # d = {}
+    # d[variable.unique_id] = deriv
+
+    # for var in reversed(order):
+    #     print(var)
+    #     if var.is_leaf():
+    #         var.accumulate_derivative(d.get(var.unique_id, 0.0))
+    #     else:
+    #         for (son, val) in var.chain_rule(d.get(var.unique_id, 0.0)):
+    #             if son.unique_id not in d:
+    #                 d[son.unique_id] = 0.0
+    #             d[son.unique_id] += val
+    
+    if variable.is_constant():
+        return
+    if variable.is_leaf():
+        variable.accumulate_derivative(deriv)
+        return
+    for (var, val) in variable.chain_rule(deriv):
+        backpropagate(var, val) 
 
 
 @dataclass
