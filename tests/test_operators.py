@@ -149,8 +149,8 @@ def test_other(a, b, c) -> None:
     """
     Write a test that ensures some other property holds for your functions.
     """
-    if abs(a) < abs(b) and abs(a) > 0.1:
-        assert log(abs(a)) < log(abs(b))
+    if abs(a) <= abs(b) and abs(a) > 0.1:
+        assert log(abs(a)) <= log(abs(b))
         assert inv(abs(a)) > inv(abs(b))
     assert is_close(a, a + 0.001) == 1.0
 
