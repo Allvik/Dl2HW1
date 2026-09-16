@@ -11,6 +11,8 @@ To access the autograder:
 * Module 4: https://classroom.github.com/a/04QA6HZK
 * Quizzes: https://classroom.github.com/a/bGcGc12k
 
+Тут вроде логи попросили вставить, так что я на всякий случай вставил.
+
 SIMPLE
 
 Epoch: 10/2000, loss: 46.38025032330035, correct: 30
