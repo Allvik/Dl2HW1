@@ -151,7 +151,7 @@ def test_other(a, b, c) -> None:
     """
     if abs(a) <= abs(b) and abs(a) > 0.1:
         assert log(abs(a)) <= log(abs(b))
-        assert inv(abs(a)) > inv(abs(b))
+        assert inv(abs(a)) >= inv(abs(b))
     assert is_close(a, a + 0.001) == 1.0
 
 
